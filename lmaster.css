@@ -1,0 +1,283 @@
+/* ── lmaster.css — L-Master 전용 스타일 ── */
+
+.lm-body { background: #0a0f18; }
+
+/* Hero */
+.lm-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: #0a0f18;
+  overflow: hidden;
+  padding-top: 68px;
+}
+.lm-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 60%, rgba(201,168,76,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 30%, rgba(192,57,43,0.06) 0%, transparent 50%);
+}
+.lm-bg-text {
+  position: absolute;
+  bottom: -20px;
+  right: -40px;
+  font-family: var(--ff-serif);
+  font-size: clamp(7rem, 20vw, 20rem);
+  font-weight: 700;
+  color: rgba(255,255,255,0.018);
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.lm-hero-content {
+  position: relative;
+  z-index: 2;
+  padding-top: 40px;
+  padding-bottom: 80px;
+}
+.lm-badge {
+  display: inline-block;
+  background: #c0392b;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  padding: 5px 14px;
+  margin-bottom: 28px;
+}
+.lm-logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.lm-logo-icon { font-size: 26px; }
+.lm-logo-text {
+  font-family: var(--ff-serif);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+}
+.lm-hero-title {
+  font-family: var(--ff-serif);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--white);
+  margin-bottom: 28px;
+}
+.lm-hero-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+.lm-hero-sub {
+  color: rgba(255,255,255,0.55);
+  font-size: 16px;
+  line-height: 1.9;
+  margin-bottom: 40px;
+  max-width: 500px;
+}
+.lm-hero-cta { display: flex; gap: 16px; }
+
+/* Sections */
+.lm-section {
+  padding: 100px 0;
+  background: #0d1520;
+}
+.lm-section:nth-child(even) {
+  background: #0a0f18;
+}
+.lm-section-title {
+  font-family: var(--ff-serif);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 48px;
+  line-height: 1.3;
+}
+
+/* Why */
+.lm-reasons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.lm-reason {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 36px 28px;
+  transition: background 0.25s, border-color 0.25s;
+}
+.lm-reason:hover {
+  background: rgba(201,168,76,0.07);
+  border-color: rgba(201,168,76,0.25);
+}
+.lm-reason-icon { font-size: 28px; margin-bottom: 18px; }
+.lm-reason h3 {
+  font-family: var(--ff-serif);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+.lm-reason p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.85;
+}
+
+/* Detail */
+.lm-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.lm-detail-item {
+  background: #0a0f18;
+  padding: 48px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.lm-detail-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--gold), transparent);
+}
+.lm-detail-num {
+  font-family: var(--ff-serif);
+  font-size: 3.5rem;
+  font-weight: 300;
+  color: rgba(201,168,76,0.12);
+  line-height: 1;
+  margin-bottom: 20px;
+}
+.lm-detail-item h3 {
+  font-family: var(--ff-serif);
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.lm-detail-item p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.9;
+}
+
+/* Plans */
+.lm-plans-section { background: #0d1520; }
+.lm-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.lm-plan {
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 36px 28px;
+  position: relative;
+  transition: border-color 0.25s;
+}
+.lm-plan.featured {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.05);
+}
+.lm-plan-top-badge {
+  position: absolute;
+  top: -1px; left: -1px; right: -1px;
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding: 5px;
+}
+.lm-plan h3 {
+  font-family: var(--ff-serif);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+.lm-plan.featured h3 { margin-top: 32px; }
+.lm-price {
+  font-family: var(--ff-serif);
+  font-size: 3rem;
+  font-weight: 400;
+  color: var(--gold);
+  margin-bottom: 28px;
+  line-height: 1;
+}
+.lm-won { font-size: 1.4rem; }
+.lm-features {
+  list-style: none;
+  margin-bottom: 28px;
+}
+.lm-features li {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.6);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  line-height: 1.5;
+}
+.lm-cta {
+  display: block;
+  text-align: center;
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 14px 24px;
+  text-decoration: none;
+  transition: background 0.25s;
+}
+.lm-cta:hover { background: var(--gold2); }
+.lm-cta.outline {
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  border: 1.5px solid rgba(255,255,255,0.2);
+}
+.lm-cta.outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* CTA section */
+.lm-cta-section {
+  background: #080d14;
+  padding: 100px 0;
+  text-align: center;
+  border-top: 1px solid rgba(201,168,76,0.15);
+}
+.lm-cta-quote {
+  font-family: var(--ff-serif);
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-style: italic;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.lm-cta-sub {
+  color: rgba(255,255,255,0.4);
+  font-size: 15px;
+  line-height: 1.9;
+  margin-bottom: 40px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .lm-reasons      { grid-template-columns: 1fr; }
+  .lm-detail-grid  { grid-template-columns: 1fr; }
+  .lm-plan-grid    { grid-template-columns: 1fr; }
+}
