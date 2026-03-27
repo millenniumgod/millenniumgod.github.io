@@ -54,7 +54,7 @@
     .pv-cat { font-size:10px; font-weight:700; letter-spacing:.15em; color:#c9a84c; text-transform:uppercase; margin-bottom:10px; }
     .pv-title { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:500; color:#0d1b2a; line-height:1.4; margin-bottom:12px; }
     .pv-meta { font-size:13px; color:#9ca3af; margin-bottom:32px; padding-bottom:24px; border-bottom:1px solid rgba(13,27,42,.08); }
-    .pv-body { font-size:15px; line-height:2; color:#374151; white-space:pre-wrap; margin-bottom:40px; }
+    .pv-body { font-size:15px; line-height:2; color:#374151; margin-bottom:40px; }
     .pv-back { display:inline-block; font-size:13px; color:#6b7280; cursor:pointer; border-bottom:1px solid #9ca3af; padding-bottom:2px; }
     .pv-back:hover { color:#0d1b2a; border-color:#0d1b2a; }
 
@@ -62,7 +62,7 @@
     .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:999; align-items:center; justify-content:center; padding:20px; }
     .overlay.open { display:flex; }
     .modal-box { background:#fff; width:100%; max-width:480px; padding:40px; position:relative; max-height:90vh; overflow-y:auto; }
-    .modal-box.wide { max-width:680px; }
+    .modal-box.wide { max-width:800px; }
     .modal-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; color:#0d1b2a; margin-bottom:24px; }
     .modal-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:22px; cursor:pointer; color:#9ca3af; }
     .mf { margin-bottom:16px; }
@@ -84,6 +84,22 @@
       .post-view-wrap, .modal-box { padding:24px 18px; }
       .board-body { padding:32px 18px 60px; }
     }
+
+    /* 리치 에디터 툴바 */
+    .editor-toolbar { display:flex; flex-wrap:wrap; gap:4px; padding:8px; background:#f3f4f6; border:1px solid rgba(13,27,42,.12); border-bottom:none; }
+    .et-btn { background:#fff; border:1px solid rgba(13,27,42,.15); padding:4px 9px; font-size:13px; cursor:pointer; font-family:sans-serif; color:#374151; transition:all .15s; border-radius:2px; }
+    .et-btn:hover { background:#e8c96a; border-color:#c9a84c; }
+    .et-btn.active { background:#0d1b2a; color:#fff; border-color:#0d1b2a; }
+    .et-sep { width:1px; background:rgba(13,27,42,.15); margin:2px 4px; }
+    .et-color { width:28px; height:28px; padding:2px; border:1px solid rgba(13,27,42,.15); cursor:pointer; border-radius:2px; }
+    #richEditor { min-height:260px; max-height:420px; overflow-y:auto; background:#f9f9f6; border:1px solid rgba(13,27,42,.12); padding:14px; font-size:14px; line-height:1.9; color:#0d1b2a; outline:none; }
+    #richEditor:focus { border-color:#c9a84c; }
+    #richEditor img { max-width:100%; height:auto; margin:8px 0; display:block; }
+    .img-upload-label { display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid rgba(13,27,42,.15); padding:4px 10px; font-size:13px; cursor:pointer; color:#374151; border-radius:2px; transition:all .15s; }
+    .img-upload-label:hover { background:#e8c96a; border-color:#c9a84c; }
+    .upload-progress { font-size:12px; color:#6b7280; margin-left:4px; }
+
+    #richEditor:empty:before { content:attr(placeholder); color:#9ca3af; pointer-events:none; }
   </style>
 </head>
 <body>
@@ -241,10 +257,47 @@
         </select>
       </div>
       <div class="mf"><label>제목</label><input type="text" id="pTitleInput" placeholder="칼럼 제목"/></div>
-      <div class="mf"><label>본문</label><textarea id="pBody" rows="12" placeholder="내용을 입력하세요"></textarea></div>
+      <div class="mf">
+        <label>본문</label>
+        <div class="editor-toolbar">
+          <button class="et-btn" onclick="fmt('bold')" title="굵게"><b>B</b></button>
+          <button class="et-btn" onclick="fmt('italic')" title="기울임"><i>I</i></button>
+          <button class="et-btn" onclick="fmt('underline')" title="밑줄"><u>U</u></button>
+          <button class="et-btn" onclick="fmt('strikeThrough')" title="취소선"><s>S</s></button>
+          <div class="et-sep"></div>
+          <button class="et-btn" onclick="fmt('justifyLeft')" title="왼쪽 정렬">≡←</button>
+          <button class="et-btn" onclick="fmt('justifyCenter')" title="가운데 정렬">≡</button>
+          <button class="et-btn" onclick="fmt('justifyRight')" title="오른쪽 정렬">≡→</button>
+          <div class="et-sep"></div>
+          <button class="et-btn" onclick="fmt('insertUnorderedList')" title="목록">• 목록</button>
+          <button class="et-btn" onclick="fmt('insertOrderedList')" title="번호 목록">1. 목록</button>
+          <div class="et-sep"></div>
+          <label title="글자색" style="display:inline-flex;align-items:center;gap:3px;font-size:12px;color:#374151;cursor:pointer">
+            A <input type="color" id="fontColorPicker" value="#c9a84c" style="width:22px;height:22px;border:none;padding:0;cursor:pointer;background:none" onchange="fmt('foreColor', this.value)" title="글자색"/>
+          </label>
+          <label title="형광펜" style="display:inline-flex;align-items:center;gap:3px;font-size:12px;color:#374151;cursor:pointer">
+            <span style="background:#ffff00;padding:0 3px">HI</span> <input type="color" id="bgColorPicker" value="#ffff00" style="width:22px;height:22px;border:none;padding:0;cursor:pointer;background:none" onchange="fmt('backColor', this.value)" title="배경색(형광펜)"/>
+          </label>
+          <div class="et-sep"></div>
+          <select onchange="fmt('fontSize', this.value);this.value=''" style="font-size:12px;padding:3px 6px;border:1px solid rgba(13,27,42,.15);background:#fff;cursor:pointer;color:#374151">
+            <option value="">글자 크기</option>
+            <option value="1">작게</option>
+            <option value="3">보통</option>
+            <option value="5">크게</option>
+            <option value="7">매우 크게</option>
+          </select>
+          <div class="et-sep"></div>
+          <label class="img-upload-label" title="이미지 삽입">
+            🖼 이미지
+            <input type="file" id="imgFileInput" accept="image/*" style="display:none" onchange="uploadImage(this)"/>
+          </label>
+          <span class="upload-progress" id="uploadProgress"></span>
+        </div>
+        <div id="richEditor" contenteditable="true" placeholder="내용을 입력하세요"></div>
+      </div>
       <div class="modal-actions">
         <button class="btn-sm line" onclick="closeModal('writeModal')">취소</button>
-        <button class="btn-sm gold" onclick="submitPost()">등록하기</button>
+        <button class="btn-sm gold" id="submitPostBtn" onclick="submitPost()">등록하기</button>
       </div>
     </div>
   </div>
@@ -355,7 +408,68 @@
       document.getElementById('loginId').value = '';
       document.getElementById('loginPw').value = '';
       document.getElementById('loginToken').value = '';
-      updateAuthUI(); renderList();
+      /* ── 리치 에디터 ── */
+  function fmt(cmd, val) {
+    document.getElementById('richEditor').focus();
+    document.execCommand(cmd, false, val || null);
+  }
+
+  /* ── 이미지 GitHub 업로드 ── */
+  async function uploadImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const token = getToken();
+    if (!token) { alert('이미지 업로드는 로그인 후 가능합니다.'); return; }
+
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) { alert('이미지는 5MB 이하만 업로드 가능합니다.'); return; }
+
+    const progress = document.getElementById('uploadProgress');
+    progress.textContent = '업로드 중...';
+
+    try {
+      const arrayBuf = await file.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuf);
+      let binary = '';
+      bytes.forEach(b => binary += String.fromCharCode(b));
+      const base64 = btoa(binary);
+
+      const ext = file.name.split('.').pop();
+      const filename = `images/${Date.now()}_${Math.random().toString(36).slice(2,7)}.${ext}`;
+      const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${filename}`;
+
+      const res = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: 'Upload column image',
+          content: base64,
+          branch: GITHUB_BRANCH
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || res.status);
+      }
+
+      const imgUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${filename}`;
+      document.getElementById('richEditor').focus();
+      document.execCommand('insertImage', false, imgUrl);
+      progress.textContent = '✅ 업로드 완료';
+      setTimeout(() => progress.textContent = '', 2000);
+    } catch(e) {
+      progress.textContent = '❌ 업로드 실패';
+      alert('이미지 업로드 오류: ' + e.message);
+    }
+    input.value = '';
+  }
+
+  updateAuthUI(); renderList();
     } else {
       errEl.textContent = '아이디 또는 비밀번호가 올바르지 않습니다.';
       errEl.style.display = 'block';
@@ -365,7 +479,68 @@
   function doLogout() {
     localStorage.removeItem('cnl_auth');
     localStorage.removeItem('cnl_gh_token');
-    updateAuthUI(); renderList();
+    /* ── 리치 에디터 ── */
+  function fmt(cmd, val) {
+    document.getElementById('richEditor').focus();
+    document.execCommand(cmd, false, val || null);
+  }
+
+  /* ── 이미지 GitHub 업로드 ── */
+  async function uploadImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const token = getToken();
+    if (!token) { alert('이미지 업로드는 로그인 후 가능합니다.'); return; }
+
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) { alert('이미지는 5MB 이하만 업로드 가능합니다.'); return; }
+
+    const progress = document.getElementById('uploadProgress');
+    progress.textContent = '업로드 중...';
+
+    try {
+      const arrayBuf = await file.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuf);
+      let binary = '';
+      bytes.forEach(b => binary += String.fromCharCode(b));
+      const base64 = btoa(binary);
+
+      const ext = file.name.split('.').pop();
+      const filename = `images/${Date.now()}_${Math.random().toString(36).slice(2,7)}.${ext}`;
+      const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${filename}`;
+
+      const res = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: 'Upload column image',
+          content: base64,
+          branch: GITHUB_BRANCH
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || res.status);
+      }
+
+      const imgUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${filename}`;
+      document.getElementById('richEditor').focus();
+      document.execCommand('insertImage', false, imgUrl);
+      progress.textContent = '✅ 업로드 완료';
+      setTimeout(() => progress.textContent = '', 2000);
+    } catch(e) {
+      progress.textContent = '❌ 업로드 실패';
+      alert('이미지 업로드 오류: ' + e.message);
+    }
+    input.value = '';
+  }
+
+  updateAuthUI(); renderList();
   }
 
   /* ── 비밀번호 변경 ── */
@@ -450,7 +625,7 @@
     document.getElementById('pvCat').textContent   = p.cat;
     document.getElementById('pvTitle').textContent = p.title;
     document.getElementById('pvMeta').textContent  = `${p.author} · ${p.date}`;
-    document.getElementById('pvBody').textContent  = p.body;
+    document.getElementById('pvBody').innerHTML  = p.body;
     const adminBtns = document.getElementById('pvAdminBtns');
     adminBtns.style.display = isAdmin() ? 'flex' : 'none';
     document.getElementById('listView').style.display = 'none';
@@ -475,7 +650,7 @@
     document.getElementById('writeTitle').textContent = '칼럼 수정';
     document.getElementById('pCat').value = p.cat;
     document.getElementById('pTitleInput').value = p.title;
-    document.getElementById('pBody').value = p.body;
+    document.getElementById('richEditor').innerHTML = p.body;
     openModal('writeModal');
   }
 
@@ -497,17 +672,18 @@
     document.getElementById('writeTitle').textContent = '새 칼럼 작성';
     document.getElementById('pCat').value = '노동법 이슈';
     document.getElementById('pTitleInput').value = '';
-    document.getElementById('pBody').value = '';
+    document.getElementById('richEditor').innerHTML = '';
     openModal('writeModal');
+    setTimeout(()=>document.getElementById('richEditor').focus(),100);
   }
 
   async function submitPost() {
     const title  = document.getElementById('pTitleInput').value.trim();
-    const body   = document.getElementById('pBody').value.trim();
+    const body   = document.getElementById('richEditor').innerHTML.trim();
     const cat    = document.getElementById('pCat').value;
-    if (!title || !body) { alert('제목과 본문을 모두 입력해주세요.'); return; }
+    if (!title || !body || body === '<br>') { alert('제목과 본문을 모두 입력해주세요.'); return; }
 
-    const submitBtn = document.querySelector('#writeModal .btn-sm.gold');
+    const submitBtn = document.getElementById('submitPostBtn');
     submitBtn.textContent = '저장 중...';
     submitBtn.disabled = true;
 
@@ -545,6 +721,67 @@
   document.querySelectorAll('.overlay').forEach(el => {
     el.addEventListener('click', e => { if (e.target===el) el.classList.remove('open'); });
   });
+
+  /* ── 리치 에디터 ── */
+  function fmt(cmd, val) {
+    document.getElementById('richEditor').focus();
+    document.execCommand(cmd, false, val || null);
+  }
+
+  /* ── 이미지 GitHub 업로드 ── */
+  async function uploadImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const token = getToken();
+    if (!token) { alert('이미지 업로드는 로그인 후 가능합니다.'); return; }
+
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) { alert('이미지는 5MB 이하만 업로드 가능합니다.'); return; }
+
+    const progress = document.getElementById('uploadProgress');
+    progress.textContent = '업로드 중...';
+
+    try {
+      const arrayBuf = await file.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuf);
+      let binary = '';
+      bytes.forEach(b => binary += String.fromCharCode(b));
+      const base64 = btoa(binary);
+
+      const ext = file.name.split('.').pop();
+      const filename = `images/${Date.now()}_${Math.random().toString(36).slice(2,7)}.${ext}`;
+      const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${filename}`;
+
+      const res = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: 'Upload column image',
+          content: base64,
+          branch: GITHUB_BRANCH
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || res.status);
+      }
+
+      const imgUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${filename}`;
+      document.getElementById('richEditor').focus();
+      document.execCommand('insertImage', false, imgUrl);
+      progress.textContent = '✅ 업로드 완료';
+      setTimeout(() => progress.textContent = '', 2000);
+    } catch(e) {
+      progress.textContent = '❌ 업로드 실패';
+      alert('이미지 업로드 오류: ' + e.message);
+    }
+    input.value = '';
+  }
 
   updateAuthUI();
   renderList();
